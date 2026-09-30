@@ -7,10 +7,6 @@ dist-electron/
 release/
 *.tsbuildinfo
 
-# Generated user data (kept out of git)
-output/*
-!output/.gitkeep
-
 # Verification scratch dirs
 .verify-*/
 

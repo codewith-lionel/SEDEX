@@ -117,11 +117,17 @@ export default function Dashboard() {
           <div className="divide-y divide-slate-100 dark:divide-slate-800">
             {recentTemplates.length === 0 && (
               <div className="px-5 py-8 text-center text-sm text-slate-400">
-                No templates yet.{' '}
-                <Link to="/templates?add=1" className="text-indigo-600 hover:underline dark:text-indigo-400">
-                  Add your first template
-                </Link>
-                .
+                <p>
+                  No templates yet.{' '}
+                  <Link to="/templates?add=1" className="text-indigo-600 hover:underline dark:text-indigo-400">
+                    Add your first template
+                  </Link>{' '}
+                  or{' '}
+                  <Link to="/templates" className="text-indigo-600 hover:underline dark:text-indigo-400">
+                    load the bundled samples
+                  </Link>
+                  .
+                </p>
               </div>
             )}
             {recentTemplates.map((t) => (

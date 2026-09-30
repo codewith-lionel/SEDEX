@@ -130,7 +130,7 @@ export function registerTemplateIpc(): void {
     return saved
   })
 
-  handle(IPC.templatesSeedSamples, z.object({}), async () => {
+  handle(IPC.templatesSeedSamples, z.object({}), () => {
     const bundledDir = getBundledTemplatesDir()
     const samples = listBundledSamples()
     if (samples.length === 0) {
@@ -140,11 +140,17 @@ export function registerTemplateIpc(): void {
       )
     }
     const folder = getTemplateFolder()
+    const existingNames = new Set(listTemplates().map((t) => t.name))
     const created: string[] = []
+    const skipped: string[] = []
     for (const sample of samples) {
-      const sourcePath = path.join(bundledDir, sample)
-      const destPath = copyTemplateIntoFolder(sourcePath, folder, path.basename(sample, '.xlsx'))
       const name = path.basename(sample, '.xlsx')
+      if (existingNames.has(name)) {
+        skipped.push(name)
+        continue
+      }
+      const sourcePath = path.join(bundledDir, sample)
+      const destPath = copyTemplateIntoFolder(sourcePath, folder, name)
       createTemplate({
         name,
         description: 'Sample template bundled with the application.',
@@ -152,9 +158,10 @@ export function registerTemplateIpc(): void {
         filePath: destPath,
         status: 'active',
       })
+      existingNames.add(name)
       created.push(name)
     }
-    return { created, count: created.length }
+    return { created, skipped, count: created.length }
   })
 
   handle(IPC.templatesRecent, z.object({}), () => recentTemplates(5))

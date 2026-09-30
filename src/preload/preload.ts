@@ -63,7 +63,7 @@ const api = {
         IPC.templatesAutoMap,
         { id, sheetName },
       ),
-    seedSamples: () => invoke<{ created: string[]; count: number }>(IPC.templatesSeedSamples, {}),
+    seedSamples: () => invoke<{ created: string[]; skipped: string[]; count: number }>(IPC.templatesSeedSamples, {}),
     saveFields: (templateId: string, fields: FieldInput[]) =>
       invoke<TemplateField[]>(IPC.fieldsSave, { templateId, fields }),
   },

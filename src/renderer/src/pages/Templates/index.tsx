@@ -29,6 +29,21 @@ export default function Templates() {
   const [addOpen, setAddOpen] = useState(searchParams.get('add') === '1')
   const [confirmDelete, setConfirmDelete] = useState<Template | null>(null)
   const [busyAction, setBusyAction] = useState<string | null>(null)
+  const [seeding, setSeeding] = useState(false)
+
+  const loadSamples = async (): Promise<void> => {
+    setSeeding(true)
+    try {
+      const res = await api.templates.seedSamples()
+      if (res.count > 0) toast('success', `Added ${res.count} sample template${res.count > 1 ? 's' : ''}.`)
+      else toast('info', res.skipped.length > 0 ? 'Sample templates are already added.' : 'No sample templates available.')
+      await refresh()
+    } catch (err) {
+      toast('error', (err as Error).message)
+    } finally {
+      setSeeding(false)
+    }
+  }
 
   const refresh = useCallback(async () => {
     try {
@@ -151,6 +166,9 @@ export default function Templates() {
   return (
     <div>
       <PageHeader title="Templates" subtitle="Upload Excel templates and manage their field mappings.">
+        <Button variant="secondary" icon="download" loading={seeding} onClick={() => void loadSamples()}>
+          Load Sample Templates
+        </Button>
         <Button icon="plus" onClick={openAdd}>
           Add Template
         </Button>
@@ -198,10 +216,13 @@ export default function Templates() {
         <EmptyState
           icon="upload"
           title="No templates yet"
-          message="Upload an Excel file (.xlsx) you use for HR/audit documentation, then map its cells to data fields."
+          message="Upload an Excel file (.xlsx) you use for HR/audit documentation, then map its cells to data fields. Or start with the bundled samples."
         >
-          <Button icon="plus" onClick={openAdd}>
-            Add Template
+          <Button icon="download" loading={seeding} onClick={() => void loadSamples()}>
+            Load Sample Templates
+          </Button>
+          <Button variant="secondary" icon="plus" onClick={openAdd}>
+            Upload Your Own
           </Button>
         </EmptyState>
       ) : null}

@@ -91,10 +91,10 @@ npm run sample:templates   # regenerate the bundled sample Excel templates in /t
 npm run sample:icon        # regenerate buildResources/icon.png
 ```
 
-First-run tip: on the **Templates** page click **Add Template** and use one of
-the sample files in `templates/` (or your own `.xlsx`). Open the template and
-click **Auto-map from labels** to get a suggested mapping in one click, adjust
-it, then hit **Generate**.
+First-run tip: on the **Templates** page click **Load Sample Templates** (or
+**Add Template** with your own `.xlsx`). Open a template and click
+**Auto-map from labels** to get a suggested mapping in one click, adjust it,
+then hit **Generate**.
 
 ## AI data extraction (optional)
 
@@ -175,9 +175,11 @@ Behaviour guarantees:
 npm run dist:win        # locally (on Windows)
 ```
 
-Or push a branch / open a PR — the GitHub Actions workflow
-(`.github/workflows/build-windows.yml`) builds on `windows-latest` and
-uploads `release/*.exe` as an artifact.
+The GitHub Actions workflow (`.github/workflows/build-windows.yml`) also
+runs automatically on **every pull request and push to main** (plus `v*`
+tags and manual dispatch): it installs with `npm ci`, typechecks, runs
+`npm run verify` (Excel-preservation + DB suites), builds the app, packages
+the installer on `windows-latest` and uploads `release/*.exe` as an artifact.
 
 ## Troubleshooting
 
