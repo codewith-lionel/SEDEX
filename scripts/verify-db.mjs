@@ -6,11 +6,10 @@
  * Run with: npm run verify
  */
 import { build } from 'esbuild'
-import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
@@ -58,7 +57,8 @@ await build({
 
 const dbFile = path.join(tmp, 'test.db')
 process.env.SEDX_DB_PATH = dbFile
-const mod = await import(out)
+// import() needs a file URL (Windows paths are not valid module specifiers).
+const mod = await import(pathToFileURL(out).href)
 
 let failures = 0
 function check(name, cond) {
@@ -160,7 +160,6 @@ check('settings stored', s.geminiApiKey === 'AIza-test' && s.aiEnabled === true 
 check('defaults applied', s.outputFolder === '/out' && s.databasePath === dbFile)
 
 mod.closeDb()
-raw.close()
 fs.rmSync(tmp, { recursive: true, force: true })
 
 if (failures > 0) {

@@ -81,6 +81,11 @@ export default function Generator() {
     return () => unsubRef.current?.()
   }, [])
 
+  // Keep the selection in sync when navigating /generate -> /generate/:id.
+  useEffect(() => {
+    if (templateId) setSelectedId(templateId)
+  }, [templateId])
+
   // Load template list + settings.
   useEffect(() => {
     void api.templates.list({ status: 'active' }).then((r) => setTemplates(r.templates)).catch(() => undefined)

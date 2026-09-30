@@ -14,7 +14,7 @@ import crypto from 'node:crypto'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, '..')
@@ -31,7 +31,8 @@ await build({
   external: ['electron', 'exceljs', 'better-sqlite3', 'zod'],
   logLevel: 'silent',
 })
-const { generateExcel } = await import(out)
+// import() needs a file URL (Windows paths are not valid module specifiers).
+const { generateExcel } = await import(pathToFileURL(out).href)
 
 let failures = 0
 function check(name, cond) {
