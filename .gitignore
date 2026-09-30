@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-electron/
+release/
+*.tsbuildinfo
+
+# Generated user data (kept out of git)
+output/*
+!output/.gitkeep
+
+# Verification scratch dirs
+.verify-*/
+
+# Logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Local env
+.env
+.env.local

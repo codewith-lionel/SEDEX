@@ -1,0 +1,49 @@
+{
+  "name": "hr-audit-form-generator",
+  "productName": "HR Audit Form Generator",
+  "version": "1.0.0",
+  "description": "Desktop application for HR documentation and Sedex/SMETA audit preparation: configure Excel templates, enter or AI-extract employee data, and generate correctly filled Excel forms while preserving the original formatting.",
+  "author": "codewith-lionel",
+  "license": "MIT",
+  "private": true,
+  "main": "dist-electron/main.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc -b",
+    "start": "electron .",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "sample:templates": "node scripts/create-sample-templates.mjs",
+    "sample:icon": "node scripts/create-icon.mjs",
+    "verify": "node scripts/verify-excel-preservation.mjs && node scripts/verify-db.mjs",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "exceljs": "^4.4.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^24.19.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
+    "postcss": "^8.4.49",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router-dom": "^7.18.4",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.1",
+    "vite-plugin-electron": "^1.1.2"
+  }
+}
