@@ -1,0 +1,44 @@
+# electron-builder configuration for HR Audit Form Generator.
+# Primary target: Windows (NSIS installer). See `npm run dist:win`.
+appId: com.sedex.hr-audit-form-generator
+productName: HR Audit Form Generator
+copyright: Copyright © 2026
+
+directories:
+  output: release
+  buildResources: buildResources
+
+files:
+  - dist/**
+  - dist-electron/**
+  - package.json
+  - templates/*.xlsx
+
+# Native modules must live outside the asar archive.
+asarUnpack:
+  - node_modules/better-sqlite3/**
+
+npmRebuild: true
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: ${name}-${version}-setup.${ext}
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: HR Audit Form Generator
+  deleteAppDataOnUninstall: false
+
+# Fallbacks so the same config also works if you package on macOS/Linux.
+mac:
+  category: public.app-category.business
+linux:
+  category: Office
+  target:
+    - AppImage
