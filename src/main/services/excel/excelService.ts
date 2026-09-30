@@ -186,8 +186,11 @@ function cellText(cell: ExcelJS.Cell): string {
   const v = cell.value
   if (v === null || v === undefined) return ''
   if (v instanceof Date) {
+    // Excel serial values are timezone-absolute; ExcelJS maps them to a Date
+    // at UTC midnight for date-only cells. Use UTC components so the preview
+    // shows exactly what Excel shows, in any user timezone.
     const p = (n: number) => String(n).padStart(2, '0')
-    return `${p(v.getDate())}/${p(v.getMonth() + 1)}/${v.getFullYear()}`
+    return `${p(v.getUTCDate())}/${p(v.getUTCMonth() + 1)}/${v.getUTCFullYear()}`
   }
   // Rich text cells are arrays of { text, font } items.
   if (Array.isArray(v)) {

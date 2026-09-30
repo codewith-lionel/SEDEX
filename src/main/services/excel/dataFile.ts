@@ -52,8 +52,10 @@ export async function parseDataFile(filePath: string): Promise<ParsedDataFile> {
 function cellToString(v: unknown): string {
   if (v === null || v === undefined) return ''
   if (v instanceof Date) {
+    // Excel serial values are timezone-absolute; use UTC components so
+    // imported dates (e.g. DOB) are not shifted by the machine's timezone.
     const p = (n: number) => String(n).padStart(2, '0')
-    return `${p(v.getDate())}/${p(v.getMonth() + 1)}/${v.getFullYear()}`
+    return `${p(v.getUTCDate())}/${p(v.getUTCMonth() + 1)}/${v.getUTCFullYear()}`
   }
   if (Array.isArray(v)) {
     return v.map((item) => (item && typeof item === 'object' && 'text' in item ? String(item.text) : '')).join('')

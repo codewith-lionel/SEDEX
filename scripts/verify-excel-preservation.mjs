@@ -116,10 +116,14 @@ await wb.xlsx.readFile(outputFile)
 const ws = wb.getWorksheet('Employee Details')
 check('B5 = Arun Kumar', ws.getCell('B5').value === 'Arun Kumar')
 check('B7 = Production', ws.getCell('B7').value === 'Production')
+// ExcelJS reads date cells into local-time Dates, so compare local
+// components — this assertion is correct in any timezone.
 const dateCell = ws.getCell('B9')
 const dateVal = dateCell.value instanceof Date ? dateCell.value : null
 check(
   'B9 is a date 2024-06-15',
+  // Generator writes UTC-midnight Dates; ExcelJS reads the file's serial back
+  // as UTC midnight in every timezone, so UTC components are the TZ-stable check.
   dateVal !== null && dateVal.getUTCFullYear() === 2024 && dateVal.getUTCMonth() === 5 && dateVal.getUTCDate() === 15,
 )
 check('B10 = 28000 (normalized from "28,000")', ws.getCell('B10').value === 28000)
